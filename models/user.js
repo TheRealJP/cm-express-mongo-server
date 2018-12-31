@@ -11,5 +11,5 @@ let userSchema = new mongoose.Schema({
     password: String
 }, {timestamps: true});
 
-var User = mongoose.model('user', userSchema);
+const User = mongoose.model('user', userSchema);
 module.exports = User;
