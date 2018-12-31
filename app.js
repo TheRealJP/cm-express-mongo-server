@@ -9,6 +9,6 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use('/api', api);
 
-app.listen(port, function () {
-  console.log("Server running on localhost:" + port);
-});
+app.listen(port, (() => {
+    console.log("Server running on localhost:" + port);
+}), err => console.log(err));
