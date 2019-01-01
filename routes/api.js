@@ -2,15 +2,15 @@ const express = require('express');
 const app = express();
 const router = express.Router();
 const mongoose = require('mongoose');
-const mongodb = require('mongodb');
 const User = require('../models/user');
 var Floor = require('../models/floor');
 const db = require("./db");
 
 const db_string = "mongodb://localhost:27017/cmdb";
 
+// mongoose client
 mongoose.connect(db_string, {useNewUrlParser: true}, () => console.log("Mongoose up!"));
-
+// mongodb client
 db.connect((err) => {
     // If err unable to connect to database
     // End application
@@ -44,7 +44,6 @@ router.post('/login', async (req, res) => {
 
 router.get('/floors', async (req, res) => {
     const resp = await Floor.find({}, (err, result) => {
-        if (result) console.log(result);
         if (err) console.log(err);
     });
     res.send(JSON.stringify(resp))
@@ -54,11 +53,11 @@ router.get('/floors/:id', async (req, res) => {
     var id = req.params.id;
     const resp = await Floor.find({floorlevel: `${id}`}, (err, result) => {
         if (result) {
-            console.log(result);
+            console.log('single floor fetch:'+result);
         }
         if (err) console.log(err);
     });
-    res.send(JSON.stringify(resp))
+    res.send(resp)
 });
 
 router.get('/floors/:id/rooms', async (req, res) => {
@@ -78,6 +77,5 @@ router.get('/floors/:id/rooms', async (req, res) => {
             }
         });
 });
-
 
 module.exports = router;
