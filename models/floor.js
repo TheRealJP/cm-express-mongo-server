@@ -6,10 +6,9 @@ let roomSchema = new mongoose.Schema({
 
 let floorSchema = new mongoose.Schema({
     floorlevel: Number,
-    rooms: [Object]
+    rooms: [{roomSchema, type: Object}]
 });
 
 
 var Floor = mongoose.model('Floor', floorSchema);
 module.exports = Floor;
-
