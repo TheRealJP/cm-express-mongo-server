@@ -1,12 +1,19 @@
 const mongoose = require('mongoose');
 
 let roomSchema = new mongoose.Schema({
-    name: String
+    naam: String,
+    type: String,
+    bezet: Boolean,
+    capaciteit: Number,
+    beamer: Boolean,
+    drukte: Number,
+    hoogte: Number,
+    breedte: Number
 });
 
 let floorSchema = new mongoose.Schema({
     floorlevel: Number,
-    rooms: [{roomSchema, type: Object}]
+    rooms: [roomSchema]
 });
 
 

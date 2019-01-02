@@ -49,15 +49,15 @@ router.get('/floors', async (req, res) => {
     res.send(JSON.stringify(resp))
 });
 
-router.get('/floors/:id', async (req, res) => {
+router.get('/floors/:id', (req, res) => {
     var id = req.params.id;
-    const resp = await Floor.find({floorlevel: `${id}`}, (err, result) => {
+    Floor.find({floorlevel: `${id}`}, (err, result) => {
         if (result) {
-            console.log('single floor fetch:'+result);
+            console.log('single floor fetch:' + result);
+            res.status(200).json(result)
         }
         if (err) console.log(err);
     });
-    res.send(resp)
 });
 
 router.get('/floors/:id/rooms', async (req, res) => {
