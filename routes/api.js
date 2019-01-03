@@ -96,16 +96,11 @@ router.get('/floors/:floorid/rooms/:roomid', async (req, res) => {
 
 router.put('/rooms/:roomid', (req, res) => {
     var roomid = req.params.roomid;
-    var floorid = req.params.floorid;
+    var floorid = parseInt(roomid.charAt(0));
     const room = req.body;
-    console.log(room['name']);
-    console.log(room['type']);
 
-
-    Floor.findOneAndUpdate()
-
-    Floor.update({'rooms.id': parseInt(roomid)}, {
-        '$set': {
+    Floor.update({'rooms.id': roomid}, {
+        $set: {
             'rooms.$.name': room['name'],
             'rooms.$.type': room['type'],
             'rooms.$.capaciteit': room['capaciteit'],
@@ -115,12 +110,91 @@ router.put('/rooms/:roomid', (req, res) => {
             'rooms.$.hoogte': room['hoogte'],
             'rooms.$.breedte': room['breedte']
         }
-    }, {"new": true}, (err, result) => {
-        console.log(result)
-        res.send(result)
-    }).then(result => {
-        console.log(result)
+    }, {new: true}, (err, result) => {
+        console.log(result);
+        // res.send(result);
     });
+
+    Floor.findOne({floorlevel: floorid})
+        .select({rooms: {$elemMatch: {id: roomid}}})
+        .then((result) => {
+            console.log(result.rooms[0]);
+            res.send(result.rooms[0])
+        });
 });
+
+// var floorid = parseInt(roomid.charAt(0));
+// console.log(room['name']);
+// console.log(room['type']);
+// console.log(roomid);
+// console.log(floorid);
+// console.log(JSON.stringify(room));
+
+// let floorTrueId;
+// Floor.findOne({floorlevel: floorid}, (err, result) => {
+//     floorTrueId = result['_id'];
+//     console.log(floorTrueId);
+// });
+//
+// Floor.findById('5c2a8746cc215a7c1c60875d', (err, floor) => {
+//     floor.rooms.set(room);
+//     floor.rooms[0].save((err, list) => {
+//         console.log('updated list:' + list);
+//     })
+
+// floor.save((err, list) => {
+//     console.log('updated list:' + list);
+// });
+// });
+
+//
+// Floor.findOne({floorlevel: floorid})
+//     .select({rooms: {$elemMatch: {id: roomid}}})
+//     .then((result) => {
+//         console.log(result.rooms[0]);
+//         result.set({name: room['name']});
+//         result.save((err, updatedRoom) => {
+//             // console.log(updatedRoom['_id']);
+//             res.send(updatedRoom);
+//         })
+//     })
+
+
+//
+// Floor.findOneAndUpdate({floorTrueId, 'rooms.id': roomid}, {
+//     $set: {
+//         'rooms.$.name': room['name'],
+//         'rooms.$.type': room['type'],
+//         'rooms.$.capaciteit': room['capaciteit'],
+//         'rooms.$.beamer': room['beamer'],
+//         'rooms.$.drukte': room['drukte'],
+//         'rooms.$.bezet': room['bezet'],
+//         'rooms.$.hoogte': room['hoogte'],
+//         'rooms.$.breedte': room['breedte']
+//     }
+// }, (err, result) => {
+//     console.log(result);
+//     res.send(result)
+//     console.log('error:' + err);
+// }, {new: true});
+//
+// Floor.findOneAndUpdate({"floorlevel": floorid, 'rooms.id': roomid}, {
+//     $set: {
+//         'rooms.$.name': "test",
+//         'rooms.$.type': room['type'],
+//         'rooms.$.capaciteit': room['capaciteit'],
+//         'rooms.$.beamer': room['beamer'],
+//         'rooms.$.drukte': room['drukte'],
+//         'rooms.$.bezet': room['bezet'],
+//         'rooms.$.hoogte': room['hoogte'],
+//         'rooms.$.breedte': room['breedte']
+//     }
+// }, (err, result) => {
+//     console.log(result);
+//     res.send(result)
+//     console.log('error:' + err);
+// }, {new: true});
+// ;
+
 
 module.exports = router;
