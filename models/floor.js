@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 let roomSchema = new mongoose.Schema({
+    id: String,
     naam: String,
     type: String,
     bezet: Boolean,

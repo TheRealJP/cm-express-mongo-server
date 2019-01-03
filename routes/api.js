@@ -78,4 +78,49 @@ router.get('/floors/:id/rooms', async (req, res) => {
         });
 });
 
+
+router.get('/floors/:floorid/rooms/:roomid', async (req, res) => {
+    // collect ids
+    var floorid = req.params.floorid;
+    var roomid = req.params.roomid;
+
+    // query
+    Floor.findOne({floorlevel: floorid})
+        .select({rooms: {$elemMatch: {id: roomid}}})
+        .then((result) => {
+            console.log(result.rooms[0]);
+            res.send(result.rooms[0])
+        });
+});
+
+
+router.put('/rooms/:roomid', (req, res) => {
+    var roomid = req.params.roomid;
+    var floorid = req.params.floorid;
+    const room = req.body;
+    console.log(room['name']);
+    console.log(room['type']);
+
+
+    Floor.findOneAndUpdate()
+
+    Floor.update({'rooms.id': parseInt(roomid)}, {
+        '$set': {
+            'rooms.$.name': room['name'],
+            'rooms.$.type': room['type'],
+            'rooms.$.capaciteit': room['capaciteit'],
+            'rooms.$.beamer': room['beamer'],
+            'rooms.$.drukte': room['drukte'],
+            'rooms.$.bezet': room['bezet'],
+            'rooms.$.hoogte': room['hoogte'],
+            'rooms.$.breedte': room['breedte']
+        }
+    }, {"new": true}, (err, result) => {
+        console.log(result)
+        res.send(result)
+    }).then(result => {
+        console.log(result)
+    });
+});
+
 module.exports = router;
