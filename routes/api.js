@@ -95,11 +95,15 @@ router.get('/floors/:floorid/rooms/:roomid', async (req, res) => {
 
 
 router.put('/rooms/:roomid', (req, res) => {
-    var roomid = req.params.roomid;
-    var floorid = parseInt(roomid.charAt(0));
-    const room = req.body;
+    const room = req.body['r'];
+    console.log('roomid:' + room['id']);
+    console.log('room:' + room);
+    var roomid = room['id'];
+    var floorid = roomid.charAt(0);
+    console.log(roomid);
+    console.log(floorid);
 
-    Floor.update({'rooms.id': roomid}, {
+    Floor.update({'room.id': roomid}, {
         $set: {
             'rooms.$.name': room['name'],
             'rooms.$.type': room['type'],
@@ -111,7 +115,7 @@ router.put('/rooms/:roomid', (req, res) => {
             'rooms.$.breedte': room['breedte']
         }
     }, {new: true}, (err, result) => {
-        console.log(result);
+        console.log('updated room?:' + JSON.stringify(result));
         // res.send(result);
     });
 
