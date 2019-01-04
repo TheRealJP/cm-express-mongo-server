@@ -9,7 +9,9 @@ let roomSchema = new mongoose.Schema({
     beamer: Boolean,
     drukte: Number,
     hoogte: Number,
-    breedte: Number
+    breedte: Number,
+    x: Number,
+    y: Number
 });
 
 let floorSchema = new mongoose.Schema({

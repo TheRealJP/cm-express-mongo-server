@@ -96,14 +96,17 @@ router.get('/floors/:floorid/rooms/:roomid', async (req, res) => {
 
 router.put('/rooms/:roomid', (req, res) => {
     const room = req.body['r'];
-    console.log('roomid:' + room['id']);
-    console.log('room:' + room);
     var roomid = room['id'];
     var floorid = roomid.charAt(0);
     console.log(roomid);
     console.log(floorid);
+    console.log(room['name']);
+    console.log(room['type']);
+    console.log(room['capaciteit']);
+    console.log(room['beamer']);
+    console.log(room['drukte']);
 
-    Floor.update({'room.id': roomid}, {
+    Floor.updateOne({'rooms.id': roomid}, {
         $set: {
             'rooms.$.name': room['name'],
             'rooms.$.type': room['type'],
@@ -114,17 +117,17 @@ router.put('/rooms/:roomid', (req, res) => {
             'rooms.$.hoogte': room['hoogte'],
             'rooms.$.breedte': room['breedte']
         }
-    }, {new: true}, (err, result) => {
+    }, (err, result) => {
         console.log('updated room?:' + JSON.stringify(result));
-        // res.send(result);
+        res.send(result);
     });
 
-    Floor.findOne({floorlevel: floorid})
-        .select({rooms: {$elemMatch: {id: roomid}}})
-        .then((result) => {
-            console.log(result.rooms[0]);
-            res.send(result.rooms[0])
-        });
+    // Floor.findOne({floorlevel: floorid})
+    //     .select({rooms: {$elemMatch: {id: roomid}}})
+    //     .then((result) => {
+    //         console.log(result.rooms[0]);
+    //         res.send(result.rooms[0])
+    //     });
 });
 
 // var floorid = parseInt(roomid.charAt(0));
